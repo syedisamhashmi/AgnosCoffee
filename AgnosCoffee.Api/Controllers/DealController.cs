@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AgnosCoffee.Api.Interfaces.Repositories;
-using AgnosCoffee.Api.Models;
+using AgnosCoffee.Data.Models.Deal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace AgnosCoffee.Api.Controllers;
 
 [Route("api/[controller]")]
-public class MenuController : ControllerBase
+public class DealController : ControllerBase
 {
-  private readonly IMenuRepository repository;
-  private readonly ILogger<MenuController> logger;
+  private readonly IDealRepository repository;
+  private readonly ILogger<DealController> logger;
 
-  public MenuController(IMenuRepository repository, ILogger<MenuController> logger)
+  public DealController(IDealRepository repository, ILogger<DealController> logger)
   {
     this.logger = logger;
     this.repository = repository;
@@ -22,7 +22,7 @@ public class MenuController : ControllerBase
   [HttpGet]
   public async Task<IActionResult> Get()
   {
-    ICollection<MenuItem> menuItems = await this.repository.GetAllMenuItems();
-    return Ok(menuItems);
+    ICollection<DealDto> deals = await this.repository.GetAllDeals();
+    return Ok(deals);
   }
 }

@@ -1,11 +1,12 @@
-
-
 using AgnosCoffee.Api.Interfaces.Repositories;
-using AgnosCoffee.Api.Models;
+using AgnosCoffee.Api.Repositories;
+using AgnosCoffee.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+namespace AgnosCoffee.Api;
 
 public class Program
 {
@@ -13,7 +14,11 @@ public class Program
   {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+    .AddJsonOptions(jsonOptions =>
+    {
+      jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
@@ -23,7 +28,10 @@ public class Program
     );
 
     //? Add repository logic
+    builder.Services.AddSingleton<DbContext>();
     builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+    builder.Services.AddScoped<IDealRepository, DealRepository>();
+    builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
     var app = builder.Build();
     // Configure the HTTP request pipeline.

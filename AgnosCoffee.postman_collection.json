@@ -1,0 +1,575 @@
+{
+	"info": {
+		"_postman_id": "8bc390cd-8978-496e-aea4-446cbcbd3d23",
+		"name": "AgnosCoffee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get MenuItems",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/menu",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"menu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Deals",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/deal",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"deal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Error - DuplicateItems",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000001\",\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"000000000000000000000001\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"000000000000000000000002\",\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"000000000000000000000004\",\n            \"quantity\": 1\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Using multiple item-quantity blocks for the same id is problematic, use the same block, and increase the quantity instead. This should throw an error"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Error - Invalid Quantity",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000001\",\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"000000000000000000000002\",\n            \"quantity\": 0\n        },\n        {\n            \"itemId\": \"000000000000000000000004\",\n            \"quantity\": -5\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Invalid item quantity in order. This should throw an error."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Error - Non-existant item",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"abcdef000000000000000001\",\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"000000000000000000000002\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"000000000000000000000004\",\n            \"quantity\": 1\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Invalid item quantity in order. This should throw an error."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Error - Bad Dealcode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000001\",\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"000000000000000000000002\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"000000000000000000000004\",\n            \"quantity\": 1\n        }\n    ],\n    \"dealCode\": \"1234567890\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Invalid item quantity in order. This should throw an error."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal not applied",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000001\",\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"000000000000000000000002\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"000000000000000000000004\",\n            \"quantity\": 1\n        }\n    ],\n    \"dealCode\": \"TwoFer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal Applied - Cannolli4Canolli",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"Cannolli4Cannolli\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Buy 1 Cannolli Get 1 Free\n1 Cannolli = 1.99 @ 10% tax\n2 Cannolli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannolli @ 1.99 w/ 10% tax = 2.189\n1 free"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal Applied - HalfACannolli",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"HalfACannolli\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Buy 1 Cannolli Get 1 Canolli 50% off.\n1 Cannolli = 1.99 @ 10% tax = 2.189\n2 Cannolli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannolli @ 1.99 w/ 10% tax = 2.189\n1 cannolli @ .995 w/ 10% tax = 1.0945\n= 3.28"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal Applied - SweetTimes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 100\n        }\n    ],\n    \"dealCode\": \"SweetTimes\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "FREE Cannollis\n100 Cannolli = 1.99 @ 10% tax = 218.90\n\nwith deal -1\n100 cannolli @ 0.0 w/ 10% tax = 0.0\n= 000"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal Applied - 10OffCannolli",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"10OffCannolli\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "10% off cannollis\n1 Cannolli = 1.99 @ 10% tax = 2.189\n2 Cannolli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannolli @ 1.99 w/ 10% tax = 1.9701\n= 1.9701\n2 cannolli @ 1.99 w/ 10% tax = 3.94\n= 3.94"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal Applied - HaveSomeCanolliWithThat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000009\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"HaveSomeCanolliWithThat\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "10% off cannollis\n2 LgPizza = 15.99 @ 10% tax = 35.178\n2 Cannolli = 3.98 @ 10% tax = 4.378\ntotal = 39.556\n\nwith deal -\n2 LgPizza = 15.99 @ 10% tax = 35.178\n1 Cannolli = 1.99 @ 10% tax = 2.189\n= 37.367"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal Applied - HungryPersonSpecial",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000a\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"00000000000000000000000d\",\n            \"quantity\": 10\n        },\n        {\n            \"itemId\": \"00000000000000000000000e\",\n            \"quantity\": 6\n        }\n    ],\n    \"dealCode\": \"HungryPersonSpecial\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Buy 1 X-X-Large Pizza, Get 50.0% off\n\n2 X-X-Large Pizza = 49.99 @ 30% tax = 194.961\n10 Onion Rings = 8.99 @ 25% tax = 112.375\n6 Chocolate Cake = 9.99 @ 2.5% tax = 61.4385\ntotal = 368.7745\n\nwith deal\n2*.5 = 1 X-X-Large Pizza = 49.99 @ 30% tax = 64.987\n10*.5 = 5 Onion Rings = 8.99 @ 25% tax = 56.1875\n6*.5 = 3 Chocolate Cake = 9.99 @ 2.5% tax = 30.71925\n= 151.893750"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal Applied - ThirstyFromThatBurger",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000006\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"000000000000000000000005\",\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"000000000000000000000003\",\n            \"quantity\": 1\n        }\n    ],\n    \"dealCode\": \"ThirstyFromThatBurger\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Buy 1 Hamburger, Get 1 Beverage free\n2 Hamburger = 3.99 @ 8.25% tax = 8.63835\n1 Large Carbonated Beverage = 2.6 @ 11% tax = 2.886\n1 Small Carbonated Beverage = 1.5 @ 8.25% tax = 1.62375\ntotal = 13.1481\n\nwith deal\n2 Hamburger = 3.99 @ 8.25% tax = 8.63835\n1 Large Carbonated Beverage = 2.6 @ 11% tax = 2.886\n0 Small Carbonated Beverage = 1.5 @ 8.25% tax = 0\ngrandtotal = 11.52435"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order - Deal Applied - TwoFer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"lastCreatedOrderId\", pm.response.json().OrderId);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000006\",\n            \"quantity\": 4\n        },\n        {\n            \"itemId\": \"000000000000000000000007\",\n            \"quantity\": 3\n        }\n    ],\n    \"dealCode\": \"TwoFer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order"
+					]
+				},
+				"description": "Buy 2 Entree, Get 1 Entree free\n4 Hamburger = 3.99 @ 8.25% tax = 17.2767\n3 Small Pizza = 6.99 @ 8.25% tax = 22.700025\ntotal = 39.976725\n\nwith deal\n3 Hamburger = 3.99 @ 8.25% tax = 12.957525\n3 Small Pizza = 6.99 @ 8.25% tax = 22.700025\ngrandtotal = 35.65755"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Order",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000006\",\n            \"quantity\": 3\n        },\n        {\n            \"itemId\": \"000000000000000000000007\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"TwoFer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order/{{lastCreatedOrderId}}",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order",
+						"{{lastCreatedOrderId}}"
+					]
+				},
+				"description": "Buy 2 Entree, Get 1 Entree free\n4 Hamburger = 3.99 @ 8.25% tax = 17.2767\n3 Small Pizza = 6.99 @ 8.25% tax = 22.700025\ntotal = 39.976725\n\nwith deal\n3 Hamburger = 3.99 @ 8.25% tax = 12.957525\n3 Small Pizza = 6.99 @ 8.25% tax = 22.700025\ngrandtotal = 35.65755"
+			},
+			"response": []
+		},
+		{
+			"name": "Pay Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 25.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{AgnosCoffeeApiUri}}/api/order/{{lastCreatedOrderId}}/pay",
+					"host": [
+						"{{AgnosCoffeeApiUri}}"
+					],
+					"path": [
+						"api",
+						"order",
+						"{{lastCreatedOrderId}}",
+						"pay"
+					]
+				},
+				"description": "Buy 2 Entree, Get 1 Entree free\n4 Hamburger = 3.99 @ 8.25% tax = 17.2767\n3 Small Pizza = 6.99 @ 8.25% tax = 22.700025\ntotal = 39.976725\n\nwith deal\n3 Hamburger = 3.99 @ 8.25% tax = 12.957525\n3 Small Pizza = 6.99 @ 8.25% tax = 22.700025\ngrandtotal = 35.65755"
+			},
+			"response": []
+		}
+	]
+}

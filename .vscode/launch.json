@@ -9,8 +9,8 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "Build AgnosCoffee",
-            "program": "${workspaceFolder}/bin/Debug/net6.0/AgnosCoffee.dll",
-            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/AgnosCoffee.Api/bin/Debug/net6.0/AgnosCoffee.Api.dll",
+            "cwd": "${workspaceFolder}/AgnosCoffee.Api",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "env": {

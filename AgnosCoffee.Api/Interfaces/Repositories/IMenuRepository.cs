@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AgnosCoffee.Api.Models;
+using AgnosCoffee.Data.Entities.Menu;
 
 namespace AgnosCoffee.Api.Interfaces.Repositories;
 
