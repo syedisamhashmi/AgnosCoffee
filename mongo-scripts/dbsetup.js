@@ -24,18 +24,18 @@ const SMALL_FRIES_ID = new ObjectId("00000000000000000000000B");
 const LARGE_FRIES_ID = new ObjectId("00000000000000000000000C");
 const ONION_RINGS_ID = new ObjectId("00000000000000000000000D");
 const CHOCO_CAKE_ID = new ObjectId("00000000000000000000000E");
-const CANNOLLI_ID = new ObjectId("00000000000000000000000F");
+const CANNOLI_ID = new ObjectId("00000000000000000000000F");
 
 // - DEAL Ids
 const NONE = new ObjectId("000000000000000000000001");
 const FREE_BVG_IF_ONE_BURGER = new ObjectId("000000000000000000000002");
 const FREE_ENTREE_IF_TWO_ENTREE = new ObjectId("000000000000000000000003");
 const HALF_OFF_IF_ONE_XXL_PIZZA = new ObjectId("000000000000000000000004");
-const FREE_CANNOLLI_IF_ONE_LG_PIZZA = new ObjectId("000000000000000000000005");
-const FREE_CANNOLLIS = new ObjectId("000000000000000000000006");
-const FREE_CANNOLLI_IF_ONE_CANNOLLI = new ObjectId("000000000000000000000007");
-const HALF_CANNOLLI_IF_ONE_CANNOLLI = new ObjectId("000000000000000000000008");
-const TEN_PCT_OFF_CANNOLLIS = new ObjectId("000000000000000000000009");
+const FREE_CANNOLI_IF_ONE_LG_PIZZA = new ObjectId("000000000000000000000005");
+const FREE_CANNOLIS = new ObjectId("000000000000000000000006");
+const FREE_CANNOLI_IF_ONE_CANNOLI = new ObjectId("000000000000000000000007");
+const HALF_CANNOLI_IF_ONE_CANNOLI = new ObjectId("000000000000000000000008");
+const TEN_PCT_OFF_CANNOLIS = new ObjectId("000000000000000000000009");
 
 /**
  * Makes a new item with the specified information.
@@ -102,7 +102,7 @@ var menuItemRes = db.Menu.insertMany([
   newItem(LARGE_FRIES_ID, "Large Fries", SIDE, 5.99, 0.2),
   newItem(ONION_RINGS_ID, "Onion Rings", SIDE, 8.99, 0.25),
   newItem(CHOCO_CAKE_ID, "Chocolate Cake", DESERT, 9.99, 0.025),
-  newItem(CANNOLLI_ID, "Cannolli", DESERT, 1.99, 0.1),
+  newItem(CANNOLI_ID, "Cannoli", DESERT, 1.99, 0.1),
 ]);
 if (menuItemRes.acknowledged) {
   console.log(
@@ -153,8 +153,8 @@ var dealRes = db.Deals.insertMany([
     },
   },
   {
-    _id: FREE_CANNOLLI_IF_ONE_LG_PIZZA,
-    dealCode: "HaveSomeCanolliWithThat",
+    _id: FREE_CANNOLI_IF_ONE_LG_PIZZA,
+    dealCode: "HaveSomeCanoliWithThat",
     constraints: {
       mustPurchaseQuantity: 1,
       mustPurchaseItem: LARGE_PIZZA_ID,
@@ -162,51 +162,51 @@ var dealRes = db.Deals.insertMany([
     },
     effects: {
       discountPercentage: 1.0,
-      appliesToItemId: CANNOLLI_ID,
-      appliesToItemName: "Cannolli",
+      appliesToItemId: CANNOLI_ID,
+      appliesToItemName: "Cannoli",
       quantity: 1,
     },
   },
   {
-    _id: FREE_CANNOLLIS,
+    _id: FREE_CANNOLIS,
     dealCode: "SweetTimes",
     constraints: {},
     effects: {
       discountPercentage: 1.0,
-      appliesToItemId: CANNOLLI_ID,
-      appliesToItemName: "Cannolli",
+      appliesToItemId: CANNOLI_ID,
+      appliesToItemName: "Cannoli",
     },
   },
   {
-    _id: TEN_PCT_OFF_CANNOLLIS,
-    dealCode: "10OffCannolli",
+    _id: TEN_PCT_OFF_CANNOLIS,
+    dealCode: "10OffCannoli",
     constraints: {},
     effects: {
       discountPercentage: 0.1,
-      appliesToItemId: CANNOLLI_ID,
-      appliesToItemName: "Cannolli",
+      appliesToItemId: CANNOLI_ID,
+      appliesToItemName: "Cannoli",
     },
   },
   {
-    _id: FREE_CANNOLLI_IF_ONE_CANNOLLI,
-    dealCode: "Cannolli4Cannolli",
+    _id: FREE_CANNOLI_IF_ONE_CANNOLI,
+    dealCode: "Cannoli4Cannoli",
     constraints: {},
     effects: {
       discountPercentage: 1.0,
-      appliesToItemId: CANNOLLI_ID,
-      appliesToItemName: "Cannolli",
+      appliesToItemId: CANNOLI_ID,
+      appliesToItemName: "Cannoli",
       quantity: 1,
       requireMin: 2,
     },
   },
   {
-    _id: HALF_CANNOLLI_IF_ONE_CANNOLLI,
-    dealCode: "HalfACannolli",
+    _id: HALF_CANNOLI_IF_ONE_CANNOLI,
+    dealCode: "HalfACannoli",
     constraints: {},
     effects: {
       discountPercentage: 0.5,
-      appliesToItemId: CANNOLLI_ID,
-      appliesToItemName: "Cannolli",
+      appliesToItemId: CANNOLI_ID,
+      appliesToItemName: "Cannoli",
       quantity: 1,
       requireMin: 2,
     },

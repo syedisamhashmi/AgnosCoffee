@@ -10,5 +10,14 @@
         "${workspaceFolder}/AgnosCoffee.Api/AgnosCoffee.Api.csproj"
       ]
     },
+    {
+      "label": "Build AgnosCoffee.Api.Tests",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/AgnosCoffee.Api/AgnosCoffee.Api.Tests/AgnosCoffee.Api.Tests.csproj"
+      ]
+    }
   ]
 }

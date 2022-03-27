@@ -1,21 +1,34 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "AgnosCoffee",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "Build AgnosCoffee",
-            "program": "${workspaceFolder}/AgnosCoffee.Api/bin/Debug/net6.0/AgnosCoffee.Api.dll",
-            "cwd": "${workspaceFolder}/AgnosCoffee.Api",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart",
-            "env": {
-              "ASPNETCORE_ENVIRONMENT": "Development"
-            }
-          },
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "AgnosCoffee",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build AgnosCoffee",
+      "program": "${workspaceFolder}/AgnosCoffee.Api/bin/Debug/net6.0/AgnosCoffee.Api.dll",
+      "cwd": "${workspaceFolder}/AgnosCoffee.Api",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": "AgnosCoffee.Api.Tests",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build AgnosCoffee.Api.Tests",
+      "program": "${workspaceFolder}/AgnosCoffee.Api/AgnosCoffee.Api.Tests/bin/Debug/net6.0/AgnosCoffee.Api.Tests.dll",
+      "cwd": "${workspaceFolder}/AgnosCoffee.Api.Tests",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  ]
 }

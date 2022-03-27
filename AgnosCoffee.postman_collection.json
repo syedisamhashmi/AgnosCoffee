@@ -193,7 +193,7 @@
 			"response": []
 		},
 		{
-			"name": "Create Order - Deal Applied - Cannolli4Canolli",
+			"name": "Create Order - Deal Applied - Cannoli4Canoli",
 			"event": [
 				{
 					"listen": "test",
@@ -211,7 +211,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"Cannolli4Cannolli\"\n}",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"Cannoli4Cannoli\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -228,12 +228,12 @@
 						"order"
 					]
 				},
-				"description": "Buy 1 Cannolli Get 1 Free\n1 Cannolli = 1.99 @ 10% tax\n2 Cannolli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannolli @ 1.99 w/ 10% tax = 2.189\n1 free"
+				"description": "Buy 1 Cannoli Get 1 Free\n1 Cannoli = 1.99 @ 10% tax\n2 Cannoli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannoli @ 1.99 w/ 10% tax = 2.189\n1 free"
 			},
 			"response": []
 		},
 		{
-			"name": "Create Order - Deal Applied - HalfACannolli",
+			"name": "Create Order - Deal Applied - HalfACannoli",
 			"event": [
 				{
 					"listen": "test",
@@ -251,7 +251,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"HalfACannolli\"\n}",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"HalfACannoli\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -268,7 +268,7 @@
 						"order"
 					]
 				},
-				"description": "Buy 1 Cannolli Get 1 Canolli 50% off.\n1 Cannolli = 1.99 @ 10% tax = 2.189\n2 Cannolli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannolli @ 1.99 w/ 10% tax = 2.189\n1 cannolli @ .995 w/ 10% tax = 1.0945\n= 3.28"
+				"description": "Buy 1 Cannoli Get 1 Canoli 50% off.\n1 Cannoli = 1.99 @ 10% tax = 2.189\n2 Cannoli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannoli @ 1.99 w/ 10% tax = 2.189\n1 cannoli @ .995 w/ 10% tax = 1.0945\n= 3.28"
 			},
 			"response": []
 		},
@@ -308,12 +308,12 @@
 						"order"
 					]
 				},
-				"description": "FREE Cannollis\n100 Cannolli = 1.99 @ 10% tax = 218.90\n\nwith deal -1\n100 cannolli @ 0.0 w/ 10% tax = 0.0\n= 000"
+				"description": "FREE Cannolis\n100 Cannoli = 1.99 @ 10% tax = 218.90\n\nwith deal -1\n100 cannoli @ 0.0 w/ 10% tax = 0.0\n= 000"
 			},
 			"response": []
 		},
 		{
-			"name": "Create Order - Deal Applied - 10OffCannolli",
+			"name": "Create Order - Deal Applied - 10OffCannoli",
 			"event": [
 				{
 					"listen": "test",
@@ -331,7 +331,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"10OffCannolli\"\n}",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"10OffCannoli\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -348,7 +348,7 @@
 						"order"
 					]
 				},
-				"description": "10% off cannollis\n1 Cannolli = 1.99 @ 10% tax = 2.189\n2 Cannolli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannolli @ 1.99 w/ 10% tax = 1.9701\n= 1.9701\n2 cannolli @ 1.99 w/ 10% tax = 3.94\n= 3.94"
+				"description": "10% off cannolis\n1 Cannoli = 1.99 @ 10% tax = 2.189\n2 Cannoli = 3.98 @ 10% tax = 4.378\n\nwith deal -\n1 cannoli @ 1.99 w/ 10% tax = 1.9701\n= 1.9701\n2 cannoli @ 1.99 w/ 10% tax = 3.94\n= 3.94"
 			},
 			"response": []
 		},
@@ -371,7 +371,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000009\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"HaveSomeCanolliWithThat\"\n}",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000009\",\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"00000000000000000000000f\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"HaveSomeCanoliWithThat\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -388,7 +388,7 @@
 						"order"
 					]
 				},
-				"description": "10% off cannollis\n2 LgPizza = 15.99 @ 10% tax = 35.178\n2 Cannolli = 3.98 @ 10% tax = 4.378\ntotal = 39.556\n\nwith deal -\n2 LgPizza = 15.99 @ 10% tax = 35.178\n1 Cannolli = 1.99 @ 10% tax = 2.189\n= 37.367"
+				"description": "10% off cannolis\n2 LgPizza = 15.99 @ 10% tax = 35.178\n2 Cannoli = 3.98 @ 10% tax = 4.378\ntotal = 39.556\n\nwith deal -\n2 LgPizza = 15.99 @ 10% tax = 35.178\n1 Cannoli = 1.99 @ 10% tax = 2.189\n= 37.367"
 			},
 			"response": []
 		},

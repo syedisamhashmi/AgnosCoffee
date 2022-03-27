@@ -71,7 +71,7 @@ public sealed class DealEffects
 
   public List<ItemQuantity> ApplyToOrder(List<ItemQuantity> items)
   {
-    ItemQuantity itemToApplyDiscount = null;
+    ItemQuantity itemToApplyDiscount = null!;
     var filteredByItem = AppliesToItemId != null;
     var filteredByGroup = AppliesToItemType != null && AppliesToItemType != ItemType.None;
 

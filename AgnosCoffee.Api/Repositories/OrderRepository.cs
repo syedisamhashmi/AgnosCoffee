@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AgnosCoffee.Api.Interfaces.Repositories;
@@ -11,8 +12,8 @@ using AgnosCoffee.Data.Models.Order;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
+[assembly: InternalsVisibleTo("AgnosCoffee.Api.Tests")]
 namespace AgnosCoffee.Api.Repositories;
-
 public class OrderRepository : IOrderRepository
 {
   private readonly DbContext context;
@@ -104,7 +105,7 @@ public class OrderRepository : IOrderRepository
   }
 
 
-  private async Task<(Order newOrder, Deal? deal)> GenerateOrderFromRequest(OrderRequestDto order, string? existingId = null)
+  internal async Task<(Order newOrder, Deal? deal)> GenerateOrderFromRequest(OrderRequestDto order, string? existingId = null)
   {
     Order newOrder = new Order();
     newOrder.Items = await VerifyOrderItems(order);
@@ -114,7 +115,7 @@ public class OrderRepository : IOrderRepository
     return (newOrder, orderDeal);
   }
 
-  private async Task<List<ItemQuantity>> VerifyOrderItems(OrderRequestDto order)
+  internal async Task<List<ItemQuantity>> VerifyOrderItems(OrderRequestDto order)
   {
     if (order is null || order.OrderItems is null)
     {
@@ -165,7 +166,7 @@ public class OrderRepository : IOrderRepository
   }
 
   #region Order Utils not exposed to users.
-  private OrderPlacedDto GetOrderTotals(Order order, Deal? deal)
+  internal OrderPlacedDto GetOrderTotals(Order order, Deal? deal)
   {
     return new OrderPlacedDto()
     {
@@ -175,7 +176,7 @@ public class OrderRepository : IOrderRepository
       GrandTotal = CalculateGrandTotalFromItemsAndDeal(order.Items!, deal),
     };
   }
-  private decimal CalculateSubTotalFromItems(List<ItemQuantity>? items)
+  internal decimal CalculateSubTotalFromItems(List<ItemQuantity>? items)
   {
     if (items is null || !items.Any())
     {
@@ -184,7 +185,7 @@ public class OrderRepository : IOrderRepository
     //? The quantity of the item, multiplied by its price, WITHOUT tax, is the subtotal.
     return items.Sum(item => (item.Quantity * item.MenuItem.Price)).RoundToTwo();
   }
-  private decimal CalculateTotalFromItems(List<ItemQuantity>? items)
+  internal decimal CalculateTotalFromItems(List<ItemQuantity>? items)
   {
     if (items is null || !items.Any())
     {
@@ -193,7 +194,7 @@ public class OrderRepository : IOrderRepository
     //? The quantity of the item, multiplied by its price, multiplied by the tax rate, is the total.
     return items.Sum(item => (item.Quantity * (item.MenuItem.Price * (item.MenuItem.TaxRate + 1)))).RoundToTwo();
   }
-  private decimal CalculateGrandTotalFromItemsAndDeal(List<ItemQuantity> items, Deal? deal)
+  internal decimal CalculateGrandTotalFromItemsAndDeal(List<ItemQuantity> items, Deal? deal)
   {
     var linesToUse = items;
     //? If Deal exists and has constraints and effects
@@ -217,7 +218,7 @@ public class OrderRepository : IOrderRepository
   /// <param name="orderId">The order's ID</param>
   /// <param name="shouldNullCheck">Whether or not to throw an exception if the order is not found.</param>
   /// <returns>The first order with the specified Id</returns>
-  private async Task<Order?> GetOrderById(string? orderId, bool shouldNullCheck = true)
+  internal async Task<Order?> GetOrderById(string? orderId, bool shouldNullCheck = true)
   {
     Order? existing = await this.context.Orders
     .Find(order => order.Id == orderId)
@@ -234,7 +235,7 @@ public class OrderRepository : IOrderRepository
   /// <param name="dealCode">The deal's code</param>
   /// <param name="shouldNullCheck">Whether or not to throw an exception if the deal is not found.</param>
   /// <returns>The first deal with the specified code</returns>
-  private async Task<Deal?> GetDealByCode(string? dealCode, bool shouldNullCheck = true)
+  internal async Task<Deal?> GetDealByCode(string? dealCode, bool shouldNullCheck = true)
   {
     //? If no deal-code, no deal.
     if (string.IsNullOrWhiteSpace(dealCode))
