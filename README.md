@@ -8,6 +8,15 @@ If you plan to use postman, please check out the
 PostmanCollection and PostmanEnvironment json files
 at the root of the repository.
 
+The same postman queries have been translated to dotnet nUnit tests as well in `AgnosCoffee.Api.Tests`
+
+```
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    13, Skipped:     0, Total:    13, Duration: 531 ms - /Us
+```
+
 ---
 
 # Background
