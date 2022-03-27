@@ -11,11 +11,8 @@ namespace AgnosCoffee.Api.Controllers;
 public class MenuController : ControllerBase
 {
   private readonly IMenuRepository repository;
-  private readonly ILogger<MenuController> logger;
-
-  public MenuController(IMenuRepository repository, ILogger<MenuController> logger)
+  public MenuController(IMenuRepository repository)
   {
-    this.logger = logger;
     this.repository = repository;
   }
 

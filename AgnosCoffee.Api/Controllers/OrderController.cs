@@ -11,11 +11,9 @@ namespace AgnosCoffee.Api.Controllers;
 public class OrderController : ControllerBase
 {
   private readonly IOrderRepository repository;
-  private readonly ILogger<OrderController> logger;
 
-  public OrderController(IOrderRepository repository, ILogger<OrderController> logger)
+  public OrderController(IOrderRepository repository)
   {
-    this.logger = logger;
     this.repository = repository;
   }
 

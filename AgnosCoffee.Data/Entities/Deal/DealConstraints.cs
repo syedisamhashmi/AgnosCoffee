@@ -81,24 +81,20 @@ public sealed class DealConstraints
   {
     //? IFF quantity is not specified or less than 0 (by default)
     //? then, require at least one
-    if (this.MustPurchaseQuantity != null && this.MustPurchaseQuantity < 0)
+    if (MustPurchaseQuantity != null &&
+        MustPurchaseQuantity < 0 &&
+        validItem.Quantity >= 1)
     {
-      if (validItem.Quantity >= 1)
-      {
-        //? User purchased enough of the specific item.
-        //? Deal constraints are satisfied.
-        return true;
-      }
+      //? User purchased enough of the specific item.
+      //? Deal constraints are satisfied.
+      return true;
     }
-    else
+    //? Quantity specified, they have to buy at least this.MustPurchaseQuantity amount
+    if (validItem.Quantity >= this.MustPurchaseQuantity)
     {
-      //? Quantity specified, they have to buy at least this.MustPurchaseQuantity amount
-      if (validItem.Quantity >= this.MustPurchaseQuantity)
-      {
-        //? User purchased enough of the specific item.
-        //? Deal constraints are satisfied.
-        return true;
-      }
+      //? User purchased enough of the specific item.
+      //? Deal constraints are satisfied.
+      return true;
     }
     //? Item quantity not met in either situation.
     return false;

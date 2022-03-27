@@ -519,7 +519,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000006\",\n            \"quantity\": 3\n        },\n        {\n            \"itemId\": \"000000000000000000000007\",\n            \"quantity\": 2\n        }\n    ],\n    \"dealCode\": \"TwoFer\"\n}",
+					"raw": "{\n    \"orderItems\": [\n        {\n            \"itemId\": \"000000000000000000000006\",\n            \"quantity\": 4\n        },\n        {\n            \"itemId\": \"000000000000000000000007\",\n            \"quantity\": 3\n        }\n    ],\n    \"dealCode\": \"TwoFer\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -548,7 +548,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"amount\": 25.00\n}",
+					"raw": "{\n    \"amount\": 35.70\n}",
 					"options": {
 						"raw": {
 							"language": "json"

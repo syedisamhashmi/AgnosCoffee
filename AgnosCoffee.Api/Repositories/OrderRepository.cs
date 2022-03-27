@@ -30,28 +30,88 @@ public class OrderRepository : IOrderRepository
     newOrder = generatedOrderAndDeal.newOrder;
     await this.context.Orders.InsertOneAsync(newOrder);
 
-    return await GetOrderTotals(newOrder, generatedOrderAndDeal.deal);
+    return GetOrderTotals(newOrder, generatedOrderAndDeal.deal);
   }
+
+  public async Task<OrderPlacedDto> UpdateOrder(string? orderId, OrderRequestDto updated)
+  {
+    if (updated is null || orderId is null)
+    {
+      throw new ArgumentException("Update request or OrderId missing.");
+    }
+
+    Order existing = (await GetOrderById(orderId))!;
+    var orderAndDeal = await GenerateOrderFromRequest(updated, orderId);
+
+    //? I WAS going to do an update, but time is thin, so.... Replace the entire document!
+    await this.context.Orders.ReplaceOneAsync(
+      (order) => order.Id == existing.Id,
+      orderAndDeal.newOrder
+    );
+    return GetOrderTotals(orderAndDeal.newOrder, orderAndDeal.deal);
+  }
+
+  public async Task<RecieptDto> PayOrder(string? orderId, PaymentDetailsDto paymentDetails)
+  {
+    if (orderId is null) //TODO I `was` going to use `orderId!!` in the param def, unsure who uses preview langVersion, though :(
+    {
+      throw new ArgumentNullException("OrderId not specified!");
+    }
+    Order order = (await GetOrderById(orderId))!;
+    if (order.Items is null)
+    {
+      return new RecieptDto()
+      {
+        Remarks = "Payment request recieved, but no items in order to pay for."
+      };
+    }
+    Deal? deal = await GetDealByCode(order.DealCode);
+    var grandTotal = CalculateGrandTotalFromItemsAndDeal(order.Items, deal).RoundToTwo();
+    var reciept = new RecieptDto();
+    if (grandTotal >= 0)
+    {
+      if (paymentDetails.Amount is null)
+      {
+        reciept.Remarks = $"Please provide a payment amount!";
+        return reciept;
+      }
+      if (paymentDetails.Amount.Value.RoundToTwo() < grandTotal)
+      {
+        reciept.Remarks = $"The order has a grand total of {grandTotal.FormatToTwo()}, you supplied {paymentDetails.Amount.Value}. Provide more funds.";
+        return reciept;
+      }
+    }
+    //? Otherwise, amount is either equal or more.
+    Thread.Sleep(5000); //Making order!!!
+
+    reciept.OrderItems = "";
+    order.Items.ForEach(
+      (item) =>
+      {
+
+        reciept.OrderItems += $"\nEnjoy your {item.Quantity} {item.MenuItem.ItemName}(s)";
+      }
+    );
+    if (paymentDetails.Amount?.RoundToTwo() > grandTotal)
+    {
+      reciept.Remarks =
+      $"The grand total was {grandTotal.FormatToTwo()}, you provided {paymentDetails.Amount?.RoundToTwo()}. Your change is: {(paymentDetails.Amount?.RoundToTwo() - grandTotal)?.RoundToTwo()}";
+    }
+
+    //? REMOVE ORDER FROM DB. ITS BEEN PAID.
+    await this.context.Orders.DeleteOneAsync(rec => rec.Id == orderId);
+    return reciept;
+  }
+
 
   private async Task<(Order newOrder, Deal? deal)> GenerateOrderFromRequest(OrderRequestDto order, string? existingId = null)
   {
     Order newOrder = new Order();
     newOrder.Items = await VerifyOrderItems(order);
-    Deal? orderDeal = await GetDealByCode(order.DealCode, shouldNullCheck: false);
+    Deal? orderDeal = await GetDealByCode(order.DealCode);
     newOrder.DealCode = orderDeal?.DealCode;
     newOrder.Id = existingId ?? ObjectId.GenerateNewId().ToString();
     return (newOrder, orderDeal);
-  }
-  private async Task<OrderPlacedDto> GetOrderTotals(Order order, Deal? deal)
-  {
-    var orderTotals = await CalculateOrderTotal(order);
-    return new OrderPlacedDto()
-    {
-      OrderId = order.Id!.ToString(),
-      OrderTotal = orderTotals.Total.RoundToTwo(),
-      OrderSubTotal = orderTotals.Subtotal.RoundToTwo(),
-      GrandTotal = CalculateGrandTotalFromItemsAndDeal(order.Items!, deal).RoundToTwo(),
-    };
   }
 
   private async Task<List<ItemQuantity>> VerifyOrderItems(OrderRequestDto order)
@@ -103,90 +163,35 @@ public class OrderRepository : IOrderRepository
     );
     return newOrderItems;
   }
-  public async Task<OrderPlacedDto> UpdateOrder(string? orderId, OrderRequestDto updated)
-  {
-    if (updated is null || orderId is null)
-    {
-      throw new ArgumentException("Update request or OrderId missing.");
-    }
-
-    Order existing = (await GetOrderById(orderId))!;
-    var orderAndDeal = await GenerateOrderFromRequest(updated, orderId);
-
-    //? I WAS going to do an update, but time is thin, so.... Replace the entire document!
-    await this.context.Orders.ReplaceOneAsync(
-      (order) => order.Id == existing.Id,
-      orderAndDeal.newOrder
-    );
-    return await GetOrderTotals(orderAndDeal.newOrder, orderAndDeal.deal);
-  }
-
-  public async Task<RecieptDto> PayOrder(string? orderId, PaymentDetailsDto paymentDetails)
-  {
-    if (orderId is null) //TODO I `was` going to use `orderId!!` in the param def, unsure who uses preview langVersion, though :(
-    {
-      throw new ArgumentNullException("OrderId not specified!");
-    }
-    Order order = (await GetOrderById(orderId))!;
-    if (order.Items is null)
-    {
-      return new RecieptDto()
-      {
-        Remarks = "Payment request recieved, but no items in order to pay for."
-      };
-    }
-    Deal? deal = await GetDealByCode(order.DealCode);
-    var grandTotal = CalculateGrandTotalFromItemsAndDeal(order.Items, deal).RoundToTwo();
-    var reciept = new RecieptDto();
-    if (grandTotal >= 0)
-    {
-      if (paymentDetails.Amount is null)
-      {
-        reciept.Remarks = $"Please provide a payment amount!";
-        return reciept;
-      }
-      if (paymentDetails.Amount.Value.RoundToTwo() < grandTotal.RoundToTwo())
-      {
-        reciept.Remarks = $"The order has a grand total of {grandTotal.RoundToTwo()}, you supplied {paymentDetails.Amount.Value.RoundToTwo()}. Provide more funds.";
-        return reciept;
-      }
-    }
-    //? Otherwise, amount is either equal or more.
-    Thread.Sleep(5000); //Making order!!!
-
-    reciept.OrderItems = "";
-    order.Items.ForEach(
-      (item) =>
-      {
-
-        reciept.OrderItems += $"\nEnjoy your {item.Quantity} {item.MenuItem.ItemName}(s)";
-      }
-    );
-    if (paymentDetails.Amount?.RoundToTwo() > grandTotal.RoundToTwo())
-    {
-      reciept.Remarks =
-      $"The grand total was {grandTotal.RoundToTwo()}, you provided {paymentDetails.Amount?.RoundToTwo()}. Your change is: {(paymentDetails.Amount?.RoundToTwo() - grandTotal.RoundToTwo())?.RoundToTwo()}";
-    }
-
-    //? REMOVE ORDER FROM DB. ITS BEEN PAID.
-    await this.context.Orders.DeleteOneAsync(rec => rec.Id == orderId);
-    return reciept;
-  }
 
   #region Order Utils not exposed to users.
-  private decimal CalculateSubTotalFromItems(List<ItemQuantity> items)
+  private OrderPlacedDto GetOrderTotals(Order order, Deal? deal)
   {
-    //? The quantity of the item 
-    //? multiplied by its price,
-    //? WITHOUT tax, is the subtotal.
-    return items.Sum(item => (item.Quantity.RoundToTwo() * item.MenuItem.Price.RoundToTwo())).RoundToTwo();
+    return new OrderPlacedDto()
+    {
+      OrderId = order.Id!.ToString(),
+      OrderSubTotal = CalculateSubTotalFromItems(order.Items),
+      OrderTotal = CalculateTotalFromItems(order.Items),
+      GrandTotal = CalculateGrandTotalFromItemsAndDeal(order.Items!, deal),
+    };
   }
-  private decimal CalculateTotalFromItems(List<ItemQuantity> items)
+  private decimal CalculateSubTotalFromItems(List<ItemQuantity>? items)
   {
-    //? The quantity of the item 
-    //? multiplied by its price,
-    //? multiplied by the tax rate, is the total.
-    return items.Sum(item => (item.Quantity.RoundToTwo() * (item.MenuItem.Price.RoundToTwo() * (item.MenuItem.TaxRate + 1)))).RoundToTwo();
+    if (items is null || !items.Any())
+    {
+      return 0;
+    }
+    //? The quantity of the item, multiplied by its price, WITHOUT tax, is the subtotal.
+    return items.Sum(item => (item.Quantity * item.MenuItem.Price)).RoundToTwo();
+  }
+  private decimal CalculateTotalFromItems(List<ItemQuantity>? items)
+  {
+    if (items is null || !items.Any())
+    {
+      return 0;
+    }
+    //? The quantity of the item, multiplied by its price, multiplied by the tax rate, is the total.
+    return items.Sum(item => (item.Quantity * (item.MenuItem.Price * (item.MenuItem.TaxRate + 1)))).RoundToTwo();
   }
   private decimal CalculateGrandTotalFromItemsAndDeal(List<ItemQuantity> items, Deal? deal)
   {
@@ -204,37 +209,7 @@ public class OrderRepository : IOrderRepository
     //? The quantity of the item (discounted!)
     //? multiplied by its price,
     //? multiplied by the tax rate, is the total.
-    return CalculateTotalFromItems(linesToUse).RoundToTwo();
-  }
-  /// <summary>
-  /// Calculates the subtotal and total on an order.
-  /// </summary>
-  /// <param name="Subtotal"></param>
-  /// <param name="newOrder"></param>
-  /// <returns></returns>
-  private async Task<(decimal Subtotal, decimal Total)> CalculateOrderTotal(Order order)
-  {
-    Deal? deal = null;
-    if (!string.IsNullOrWhiteSpace(order.DealCode))
-    {
-      deal = await this.context.Deals
-        .Find(deal => deal.DealCode == order.DealCode)
-        .FirstOrDefaultAsync();
-      if (deal is null)
-      {
-        throw new NullReferenceException($"Deal {order.DealCode} not found!");
-      }
-    }
-    if (order.Items is null || !order.Items.Any())
-    {
-      throw new NullReferenceException($"Order has no items!");
-    }
-
-    return
-    (
-      CalculateSubTotalFromItems(order.Items),
-      CalculateTotalFromItems(order.Items)
-    );
+    return CalculateTotalFromItems(linesToUse);
   }
   /// <summary>
   /// Get an order by ID
@@ -244,9 +219,9 @@ public class OrderRepository : IOrderRepository
   /// <returns>The first order with the specified Id</returns>
   private async Task<Order?> GetOrderById(string? orderId, bool shouldNullCheck = true)
   {
-    Order? existing = await this.context.Orders.Find(
-      order => order.Id == orderId
-    ).FirstOrDefaultAsync();
+    Order? existing = await this.context.Orders
+    .Find(order => order.Id == orderId)
+    .FirstOrDefaultAsync();
     if (shouldNullCheck && existing is null)
     {
       throw new Exception($"Order {orderId} missing!");
@@ -261,6 +236,7 @@ public class OrderRepository : IOrderRepository
   /// <returns>The first deal with the specified code</returns>
   private async Task<Deal?> GetDealByCode(string? dealCode, bool shouldNullCheck = true)
   {
+    //? If no deal-code, no deal.
     if (string.IsNullOrWhiteSpace(dealCode))
     {
       return null;

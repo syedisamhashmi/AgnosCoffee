@@ -11,11 +11,9 @@ namespace AgnosCoffee.Api.Controllers;
 public class DealController : ControllerBase
 {
   private readonly IDealRepository repository;
-  private readonly ILogger<DealController> logger;
 
-  public DealController(IDealRepository repository, ILogger<DealController> logger)
+  public DealController(IDealRepository repository)
   {
-    this.logger = logger;
     this.repository = repository;
   }
 
